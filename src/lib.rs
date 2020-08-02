@@ -84,6 +84,20 @@ impl<S> AsFutex<S> for AtomicI32 {
 	}
 }
 
+impl<S> AsFutex<S> for *const i32 {
+	#[must_use]
+	#[inline]
+	fn as_futex(&self) -> &Futex<S> {
+		unsafe { std::mem::transmute(self) }
+	}
+
+	#[inline]
+	#[must_use]
+	fn as_pi_futex(&self) -> &PiFutex<S> {
+		unsafe { std::mem::transmute(self) }
+	}
+}
+
 impl<S> Futex<S> {
 	/// Create a new [`Futex`] with an initial value.
 	#[inline]
